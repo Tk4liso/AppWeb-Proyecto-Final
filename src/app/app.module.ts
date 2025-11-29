@@ -48,6 +48,21 @@ import { MaestrosScreenComponent } from './screens/maestros-screen/maestros-scre
 import { NavbarUserComponent } from './partials/navbar-user/navbar-user.component';
 import { SidebarComponent } from './partials/sidebar/sidebar.component';
 
+//ToDo: Imports de la tarea:
+import { MatSortModule } from '@angular/material/sort';
+//ToDo: EditDel - xd
+import { EliminarUserModalComponent } from './modals/eliminar-user-modal/eliminar-user-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
+//ToDo: Gráficas
+// Modulo para las gráficas
+import { NgChartsModule } from 'ng2-charts';
+import { GraficasScreenComponent } from './screens/graficas-screen/graficas-screen.component';
+import { MateriasScreenComponent } from './screens/materias-screen/materias-screen.component';
+import { RegistroMateriasComponent } from './partials/registro-materias/registro-materias.component'
+//ToDo: MATERIAS
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,7 +78,11 @@ import { SidebarComponent } from './partials/sidebar/sidebar.component';
     AlumnosScreenComponent,
     MaestrosScreenComponent,
     NavbarUserComponent,
-    SidebarComponent
+    SidebarComponent,
+    EliminarUserModalComponent,
+    GraficasScreenComponent,
+    MateriasScreenComponent,
+    RegistroMateriasComponent
   ],
   imports: [
     BrowserModule,
@@ -84,7 +103,11 @@ import { SidebarComponent } from './partials/sidebar/sidebar.component';
     MatSelectModule,
     MatSidenavModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSortModule, //ToDo: Import de la tarea
+    MatDialogModule, //ToDo: EditDel
+    NgChartsModule,
+    NgxMatTimepickerModule //ToDo: MATERIAS
   ],
   providers: [
     CookieService,

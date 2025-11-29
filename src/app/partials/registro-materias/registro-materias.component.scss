@@ -1,0 +1,97 @@
+.wrapper {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 2rem;
+}
+
+.section-registro {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.body-registro {
+  width: 60%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Espaciados entre inputs */
+mat-form-field {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.btns-registro {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.title-user {
+  font-size: 28px;
+  font-family: Nexa-Bold;
+  color: #231F20;
+  margin-bottom: 1rem;
+}
+
+/* === MATERIAL FIELDS === */
+
+mat-form-field {
+  width: 100%;
+  text-align: left !important;
+}
+
+/* === ROWS DE CAMPOS === */
+
+.row {
+  width: 100%;
+  margin: 0;
+}
+
+/* === BOTONES === */
+
+.section-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.btn-primary {
+  width: 180px;
+  height: 48px;
+  background-color: #0092B8 !important;
+  border-color: #0092B8 !important;
+  font-family: Nexa-Bold;
+}
+
+.btn-danger {
+  width: 180px;
+  height: 48px;
+  border-radius: 8px !important;
+  font-family: Nexa-Bold;
+}
+
+/* === RESPONSIVO === */
+
+@media (max-width: 700px) {
+
+  .section-registro {
+    width: 95%;
+  }
+
+  .title-user {
+    font-size: 22px;
+  }
+
+  .section-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .btn-primary,
+  .btn-danger {
+    width: 100%;
+  }
+}

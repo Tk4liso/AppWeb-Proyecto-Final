@@ -132,4 +132,60 @@ export class AlumnosService {
     }
     return this.http.post<any>(`${environment.url_api}/alumnos/`, data, { headers });
   }
+
+  //ToDo: AQUÍ AGREGUÉ EL MÉTODO PARA GENERAR LA LISTA DE ALUMNOS
+  // Petición para obtener la lista de alumnos
+  public obtenerListaAlumnos(): Observable<any> {
+    const token = this.facadeService.getSessionToken();
+    let headers: HttpHeaders;
+    if (token) {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
+    } else {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+      console.log("No se encontró el token del usuario");
+
+    }
+    return this.http.get<any>(`${environment.url_api}/lista-alumnos/`, { headers });
+  }
+
+  //ToDo: EditDel - brrr
+  public obtenerAlumnoPorID(idAlumno: number): Observable<any> {
+   const token = this.facadeService.getSessionToken();
+    let headers: HttpHeaders;
+
+    if (token) {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
+    } else {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    }
+    return this.http.get<any>(`${environment.url_api}/alumnos/?id=${idAlumno}`, { headers });
+  }
+
+
+  //ToDo: EditDel - brrr
+  public actualizarAlumno(data: any){
+    const token = this.facadeService.getSessionToken();
+    let headers: HttpHeaders;
+
+    if (token) {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
+    } else {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    }
+    return this.http.put<any>(`${environment.url_api}/alumnos/`, data, { headers });
+  }
+
+  //ToDo: EditDel - brr
+  //Eliminar alumno
+  public eliminarAlumno(idAlumno: number): Observable<any>{
+    // Verificamos si existe el token de sesión
+    const token = this.facadeService.getSessionToken();
+    let headers: HttpHeaders;
+    if (token) {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
+    } else {
+      headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    }
+    return this.http.delete<any>(`${environment.url_api}/alumnos/?id=${idAlumno}`, { headers });
+  }
 }

@@ -1,0 +1,151 @@
+<!-- ToDo: Copiar y pegar desde alumnos-screen.component.html y adaptar según sea el caso -->
+
+<div class="wrapper main-content-materias">
+  <div class="header-home-materias"></div>
+  <div class="body-materias">
+
+    <!-- Datos iniciales de la vista de materias -->
+    <div class="row mt-5 mb-5">
+      <div class="col-12">
+        <span class="title-perfil">Bienvenido {{name_user}}</span><br>
+        <span class="title-perfil">{{rol}}</span>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Título -->
+      <div class="row mt-3 mb-5" style="text-align: center;">
+        <div class="col-12">
+          <div class="alert alert-primary" role="alert">
+            <span class="title-table">Lista de materias registradas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-end">
+          <button class="btn btn-primary" routerLink="/registro-usuarios/materias">
+            Registrar Materia
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <ng-container *ngIf="lista_materias.length > 0; else noData">
+        <div class="table-scroll-wrapper">
+          <div class="mat-elevation-z8">
+
+            <!-- Buscador / filtrado -->
+            <mat-form-field appearance="outline" style="width:100%; margin-bottom:12px;">
+              <mat-label>Buscar por nombre de materia</mat-label>
+              <input matInput placeholder="Ej. Programación Web" (keyup)="aplicarFiltro(($any($event.target)).value)" />
+            </mat-form-field>
+
+            <!-- Tabla de materias -->
+            <table mat-table [dataSource]="dataSource" matSort style="min-width: 1200px; width: 100%;">
+
+              <!-- NRC -->
+              <ng-container matColumnDef="nrc">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="nrc"> NRC </th>
+                <td mat-cell *matCellDef="let el"> {{el.nrc}} </td>
+              </ng-container>
+
+              <!-- Nombre -->
+              <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="nombre"> Nombre de la materia </th>
+                <td mat-cell *matCellDef="let el"> {{el.nombre}} </td>
+              </ng-container>
+
+              <!-- Sección -->
+              <ng-container matColumnDef="seccion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="seccion"> Sección </th>
+                <td mat-cell *matCellDef="let el"> {{el.seccion}} </td>
+              </ng-container>
+
+              <!-- Días -->
+              <ng-container matColumnDef="dias">
+                <th mat-header-cell *matHeaderCellDef> Días </th>
+                <td mat-cell *matCellDef="let el"> {{el.dias}} </td>
+              </ng-container>
+
+              <!-- Horario -->
+              <ng-container matColumnDef="horario">
+                <th mat-header-cell *matHeaderCellDef> Horario </th>
+                <td mat-cell *matCellDef="let el">
+                  {{el.hora_inicio}} - {{el.hora_fin}}
+                </td>
+              </ng-container>
+
+              <!-- Salón -->
+              <ng-container matColumnDef="salon">
+                <th mat-header-cell *matHeaderCellDef> Salón </th>
+                <td mat-cell *matCellDef="let el"> {{el.salon}} </td>
+              </ng-container>
+
+              <!-- Programa -->
+              <ng-container matColumnDef="programa">
+                <th mat-header-cell *matHeaderCellDef> Programa </th>
+                <td mat-cell *matCellDef="let el"> {{el.programa}} </td>
+              </ng-container>
+
+              <!-- Maestro asignado -->
+              <ng-container matColumnDef="maestro_asignado">
+                <th mat-header-cell *matHeaderCellDef> Maestro asignado </th>
+                <td mat-cell *matCellDef="let el">
+                  {{el.maestro_asignado}}
+                </td>
+              </ng-container>
+
+              <!-- Créditos -->
+              <ng-container matColumnDef="creditos">
+                <th mat-header-cell *matHeaderCellDef> Créditos </th>
+                <td mat-cell *matCellDef="let el"> {{el.creditos}} </td>
+              </ng-container>
+
+              <!-- Editar -->
+              <ng-container matColumnDef="editar">
+                <th mat-header-cell *matHeaderCellDef> Editar </th>
+                <td mat-cell *matCellDef="let el" class="td-editar">
+                  <i class="bi bi-pencil-square" (click)="editar(el.id)"></i>
+                </td>
+              </ng-container>
+
+              <!-- Eliminar -->
+              <ng-container matColumnDef="eliminar">
+                <th mat-header-cell *matHeaderCellDef> Eliminar </th>
+                <td mat-cell *matCellDef="let el" class="td-eliminar">
+                  <i class="bi bi-trash3-fill" (click)="eliminar(el.id)"></i>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <!-- Mensaje cuando el filtro no encuentra nada -->
+            <div *ngIf="dataSource.filteredData.length === 0" class="alert alert-warning" role="alert">
+              No se encontraron resultados para el filtro.
+            </div>
+
+          </div>
+
+          <!-- Paginator -->
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements" style="min-width: 1200px; width: 100%;">
+          </mat-paginator>
+        </div>
+      </ng-container>
+
+      <!-- Si no hay datos, mostramos un mensaje alternativo -->
+      <ng-template #noData>
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+              No hay materias registradas.
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -20,71 +20,82 @@ export class RegistroMaestrosComponent implements OnInit {
   public inputType_1: string = 'password';
   public inputType_2: string = 'password';
 
-  public maestro:any = {};
-  public errors:any = {};
-  public editar:boolean = false;
+  public maestro: any = {};
+  public errors: any = {};
+  public editar: boolean = false;
   public token: string = "";
   public idUser: Number = 0;
 
   //Para el select
   public areas: any[] = [
-    {value: '1', viewValue: 'Desarrollo Web'},
-    {value: '2', viewValue: 'Programación'},
-    {value: '3', viewValue: 'Bases de datos'},
-    {value: '4', viewValue: 'Redes'},
-    {value: '5', viewValue: 'Matemáticas'},
+    { value: '1', viewValue: 'Desarrollo Web' },
+    { value: '2', viewValue: 'Programación' },
+    { value: '3', viewValue: 'Bases de datos' },
+    { value: '4', viewValue: 'Redes' },
+    { value: '5', viewValue: 'Matemáticas' },
   ];
 
-  public materias:any[] = [
-    {value: '1', nombre: 'Aplicaciones Web'},
-    {value: '2', nombre: 'Programación 1'},
-    {value: '3', nombre: 'Bases de datos'},
-    {value: '4', nombre: 'Tecnologías Web'},
-    {value: '5', nombre: 'Minería de datos'},
-    {value: '6', nombre: 'Desarrollo móvil'},
-    {value: '7', nombre: 'Estructuras de datos'},
-    {value: '8', nombre: 'Administración de redes'},
-    {value: '9', nombre: 'Ingeniería de Software'},
-    {value: '10', nombre: 'Administración de S.O.'},
+  public materias: any[] = [
+    { value: '1', nombre: 'Aplicaciones Web' },
+    { value: '2', nombre: 'Programación 1' },
+    { value: '3', nombre: 'Bases de datos' },
+    { value: '4', nombre: 'Tecnologías Web' },
+    { value: '5', nombre: 'Minería de datos' },
+    { value: '6', nombre: 'Desarrollo móvil' },
+    { value: '7', nombre: 'Estructuras de datos' },
+    { value: '8', nombre: 'Administración de redes' },
+    { value: '9', nombre: 'Ingeniería de Software' },
+    { value: '10', nombre: 'Administración de S.O.' },
   ];
 
   constructor(
     private router: Router,
-    private location : Location,
+    private location: Location,
     public activatedRoute: ActivatedRoute,
     private facadeService: FacadeService,
     private maestrosService: MaestrosService
   ) { }
 
+  //ToDo: EditDel - lo copié y adapté de admin
   ngOnInit(): void {
-    this.maestro = this.maestrosService.esquemaMaestro();
-    // Rol del usuario
-    this.maestro.rol = this.rol;
-
-    console.log("Datos maestro: ", this.maestro);
+    // El primer if valida si existe un parámetro en la URL
+    if (this.activatedRoute.snapshot.params['id'] != undefined) {
+      this.editar = true;
+      // Asignamos a nuestra variable global el valor del ID que viene por la URL
+      this.idUser = this.activatedRoute.snapshot.params['id'];
+      console.log("ID Maestro: ", this.idUser);
+      // Al iniciar la vista asignamos los datos del maestro
+      this.maestro = this.datos_user;
+    } else {
+      this.maestro = this.maestrosService.esquemaMaestro();
+      this.maestro.rol = this.rol;
+      this.token = this.facadeService.getSessionToken();
+    }
+    // Imprimir datos en consola
+    console.log("Maestro: ", this.maestro);
   }
 
-  public regresar(){
+  public regresar() {
     this.location.back();
   }
 
-  public registrar(){
+  public registrar() {
     //Validamos si el formulario está lleno y correcto
     this.errors = {};
     this.errors = this.maestrosService.validarMaestro(this.maestro, this.editar);
-    if(Object.keys(this.errors).length > 0){
+    if (Object.keys(this.errors).length > 0) {
       return false;
     }
     //Validar la contraseña
-    if(this.maestro.password == this.maestro.confirmar_password){
+    if (this.maestro.password == this.maestro.confirmar_password) {
       this.maestrosService.registrarMaestro(this.maestro).subscribe(
         (response) => {
           // Redirigir o mostrar mensaje de éxito
           alert("Maestro registrado exitosamente");
           console.log("Maestro registrado: ", response);
-          if(this.token && this.token !== ""){
+          if (this.token && this.token !== "") {
             this.router.navigate(["maestros"]);
-          }else{
+          } else {
             this.router.navigate(["/"]);
           }
         },
@@ -94,44 +105,62 @@ export class RegistroMaestrosComponent implements OnInit {
           console.error("Error al registrar maestro: ", error);
         }
       );
-    }else{
+    } else {
       alert("Las contraseñas no coinciden");
-      this.maestro.password="";
-      this.maestro.confirmar_password="";
+      this.maestro.password = "";
+      this.maestro.confirmar_password = "";
     }
   }
 
-  public actualizar(){
-
+  //ToDo: EditDel - copié y adapté de admin
+  public actualizar() {
+    // Validación de los datos
+    this.errors = {};
+    this.errors = this.maestrosService.validarMaestro(this.maestro, this.editar);
+    if (Object.keys(this.errors).length > 0) {
+      return false;
+    }
+    // Ejecutamos el servicio de actualización
+    this.maestrosService.actualizarMaestro(this.maestro).subscribe(
+      (response) => {
+        // Redirigir o mostrar mensaje de éxito
+        alert("Maestro actualizado exitosamente");
+        console.log("Maestro actualizado: ", response);
+        this.router.navigate(["maestros"]);
+      },
+      (error) => {
+        // Manejar errores de la API
+        alert("Error al actualizar maestro");
+        console.error("Error al actualizar maestro: ", error);
+      }
+    );
   }
 
   //Funciones para password
-  showPassword()
-  {
-    if(this.inputType_1 == 'password'){
+  showPassword() {
+    if (this.inputType_1 == 'password') {
       this.inputType_1 = 'text';
       this.hide_1 = true;
     }
-    else{
+    else {
       this.inputType_1 = 'password';
       this.hide_1 = false;
     }
   }
 
-  showPwdConfirmar()
-  {
-    if(this.inputType_2 == 'password'){
+  showPwdConfirmar() {
+    if (this.inputType_2 == 'password') {
       this.inputType_2 = 'text';
       this.hide_2 = true;
     }
-    else{
+    else {
       this.inputType_2 = 'password';
       this.hide_2 = false;
     }
   }
 
   //Función para detectar el cambio de fecha
-  public changeFecha(event :any){
+  public changeFecha(event: any) {
     console.log(event);
     console.log(event.value.toISOString());
 
@@ -140,30 +169,30 @@ export class RegistroMaestrosComponent implements OnInit {
   }
 
   // Funciones para los checkbox
-  public checkboxChange(event:any){
+  public checkboxChange(event: any) {
     console.log("Evento: ", event);
-    if(event.checked){
+    if (event.checked) {
       this.maestro.materias_json.push(event.source.value)
-    }else{
+    } else {
       console.log(event.source.value);
       this.maestro.materias_json.forEach((materia, i) => {
-        if(materia == event.source.value){
-          this.maestro.materias_json.splice(i,1)
+        if (materia == event.source.value) {
+          this.maestro.materias_json.splice(i, 1)
         }
       });
     }
     console.log("Array materias: ", this.maestro);
   }
 
-  public revisarSeleccion(nombre: string){
-    if(this.maestro.materias_json){
-      var busqueda = this.maestro.materias_json.find((element)=>element==nombre);
-      if(busqueda != undefined){
+  public revisarSeleccion(nombre: string) {
+    if (this.maestro.materias_json) {
+      var busqueda = this.maestro.materias_json.find((element) => element == nombre);
+      if (busqueda != undefined) {
         return true;
-      }else{
+      } else {
         return false;
       }
-    }else{
+    } else {
       return false;
     }
   }
